@@ -36,7 +36,8 @@ public class Main extends JFrame {
 
         // < 회원가입 버튼 만들기 >
         JButton join = new JButton("회원가입");
-        join.setFont(new Font("한컴 말랑말랑 Bold", Font.BOLD, 15));
+        Font font = join.getFont();
+        join.setFont(new Font(font.getName(), font.getStyle(), 15));
         join.setLocation(230, 300);
         join.setSize(100, 40);
         contentPane.add(join);
@@ -45,22 +46,22 @@ public class Main extends JFrame {
 
         // < 로그인 버튼 만들기 >
         JButton login = new JButton("로그인");
-        login.setFont(new Font("한컴 말랑말랑 Bold", Font.BOLD, 15));
-        login.setLocation(380, 300);
+        login.setFont(new Font(font.getName(), font.getStyle(), 13));
+        login.setLocation(390, 300);
         login.setSize(80, 40);
         contentPane.add(login);
         login.setBackground(Color.WHITE);
         contentPane.setLayout(null);
 
-        // < 개인정보변경 버튼 만들기 >
-        /*JButton change = new JButton("개인정보변경");
-        change.setFont(new Font("한컴 말랑말랑 Bold", Font.BOLD, 20));
-        change.setLocation(210, 220);
-        change.setSize(75, 30);
+        //< 개인정보변경 버튼 만들기 >
+        JButton change = new JButton("개인정보변경");
+        change.setFont(new Font(font.getName(), font.getStyle(), 12));
+        change.setLocation(295, 360);
+        change.setSize(120, 30);
         contentPane.add(change);
         change.setBackground(Color.WHITE);
-        contentPane.setLayout(null);*/
-        
+        contentPane.setLayout(null);
+
         // < 로그인 버튼 누르면 MovieChart 창 뜸 >
         login.addActionListener((var e) -> {
             try {
@@ -95,6 +96,13 @@ public class Main extends JFrame {
         }
         );
         setVisible(true);
+
+        // < 개인정보변경 버튼을 누르면 MemberInfoChanger 창 뜸>
+        change.addActionListener((ActionEvent e) -> {
+            new MemberInfoChanger();
+            setVisible(false);
+        }
+        );
     }
 
     class MainPanel extends JPanel {

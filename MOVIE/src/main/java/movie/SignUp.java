@@ -51,7 +51,8 @@ public class SignUp extends JFrame {
 
         // 회원가입
         JButton signup = new JButton("회원가입");
-        signup.setFont(new Font("한컴 말랑말랑 Bold", Font.BOLD, 15));
+        Font font = signup.getFont();
+        signup.setFont(new Font(font.getName(), font.getStyle(), 15));
         signup.setLocation(280, 380);
         signup.setSize(100, 40);
         contentPane.add(signup);
@@ -85,12 +86,12 @@ public class SignUp extends JFrame {
                 JOptionPane.showMessageDialog(null, "회원가입에 실패하셨습니다.");
             }
         });
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+        /*Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             File file = new File("member.txt");
             if (file.exists()) {
                 file.delete();
             }
-        }));
+        }));*/
     }
 
     class SignUpPanel extends JPanel {
