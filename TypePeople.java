@@ -4,13 +4,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class TypePeople extends JFrame {
+    private static volatile TypePeople instance;
+
     private int totalNumberOfPeople;
 
-    public TypePeople(int totalNumberOfPeople) {
+    TypePeople(int totalNumberOfPeople) {
         this.totalNumberOfPeople = totalNumberOfPeople;
 
         setTitle("좌석 유형 선택");
-        setSize(400, 200);
+        setSize(600, 200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
@@ -38,7 +40,6 @@ public class TypePeople extends JFrame {
                 int numberOfChildren = Integer.parseInt(childrenTextField.getText());
                 int numberOfInfants = Integer.parseInt(infantsTextField.getText());
 
-                // 인원 수 총합 검사
                 int total = numberOfAdults + numberOfYouths + numberOfStudents + numberOfChildren + numberOfInfants;
                 if (total != totalNumberOfPeople) {
                     JOptionPane.showMessageDialog(TypePeople.this, "입력된 인원 수의 합이 일치하지 않습니다.");
@@ -46,7 +47,7 @@ public class TypePeople extends JFrame {
                 }
 
                 dispose();
-                Seats seats = new Seats(totalNumberOfPeople, numberOfAdults, numberOfYouths, numberOfStudents, numberOfChildren, numberOfInfants);
+                Seats seats = SeatFactory.createSeats(totalNumberOfPeople, numberOfAdults, numberOfYouths, numberOfStudents, numberOfChildren, numberOfInfants);
                 seats.setVisible(true);
             }
         });
@@ -61,8 +62,22 @@ public class TypePeople extends JFrame {
         panel.add(childrenTextField);
         panel.add(infantsLabel);
         panel.add(infantsTextField);
-        panel.add(nextButton);
-
         add(panel, BorderLayout.CENTER);
+        add(nextButton,BorderLayout.SOUTH);
+
+    }
+
+    public static synchronized TypePeople getInstance(int totalNumberOfPeople) {
+        if (instance == null) {
+            instance = new TypePeople(totalNumberOfPeople);
+        }
+        return instance;
+    }
+}
+
+class SeatFactory {
+    public static Seats createSeats(int totalNumberOfPeople, int numberOfAdults, int numberOfYouths,
+                                    int numberOfStudents, int numberOfChildren, int numberOfInfants) {
+        return new Seats(totalNumberOfPeople, numberOfAdults, numberOfYouths, numberOfStudents, numberOfChildren, numberOfInfants);
     }
 }

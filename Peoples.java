@@ -36,8 +36,10 @@ public class Peoples extends JFrame {
         add(panel, BorderLayout.CENTER);
     }
 
+
     public static void main(String[] args) {
         Peoples frame = new Peoples();
         frame.setVisible(true);
-        }
+
     }
+}

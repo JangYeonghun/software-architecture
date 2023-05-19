@@ -34,6 +34,17 @@ public class Seats extends JFrame {
 
         selectedSeats = new HashSet<>();
 
+        JPanel seatsPanel = createSeatsPanel();
+        add(seatsPanel, BorderLayout.CENTER);
+
+        JPanel infoPanel = createInfoPanel();
+        add(infoPanel, BorderLayout.SOUTH);
+
+        JButton nextButton = createNextButton();
+        add(nextButton, BorderLayout.SOUTH);
+    }
+
+    private JPanel createSeatsPanel() {
         JPanel seatsPanel = new JPanel(new GridLayout(5, 5));
         JButton[][] seatButtons = new JButton[5][5];
         for (int i = 0; i < 5; i++) {
@@ -43,8 +54,10 @@ public class Seats extends JFrame {
                 seatsPanel.add(seatButtons[i][j]);
             }
         }
-        add(seatsPanel, BorderLayout.CENTER);
+        return seatsPanel;
+    }
 
+    private JPanel createInfoPanel() {
         JPanel infoPanel = new JPanel(new GridLayout(3, 2));
         JLabel numberOfPeopleLabel = new JLabel("인원수: " + totalNumberOfPeople);
         JLabel selectedSeatsTitleLabel = new JLabel("선택한 좌석:");
@@ -57,8 +70,10 @@ public class Seats extends JFrame {
         infoPanel.add(selectedSeatsLabel);
         infoPanel.add(totalPriceTitleLabel);
         infoPanel.add(totalPriceLabel);
-        add(infoPanel, BorderLayout.SOUTH);
+        return infoPanel;
+    }
 
+    private JButton createNextButton() {
         JButton nextButton = new JButton("예매내역 확인하기");
         nextButton.addActionListener(new ActionListener() {
             @Override
@@ -69,12 +84,13 @@ public class Seats extends JFrame {
                 }
 
                 dispose();
-                Rvpreview rvpreview = new Rvpreview(totalNumberOfPeople, numberOfAdults, numberOfYouths, numberOfStudents, numberOfChildren, numberOfInfants, selectedSeats);
+                Rvpreview rvpreview = Rvpreview.createInstance(totalNumberOfPeople, numberOfAdults, numberOfYouths,
+                        numberOfStudents, numberOfChildren, numberOfInfants,
+                        selectedSeats,true);
                 rvpreview.setVisible(true);
             }
         });
-
-        add(nextButton, BorderLayout.SOUTH);
+        return nextButton;
     }
 
     private class SeatButtonListener implements ActionListener {

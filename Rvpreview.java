@@ -29,42 +29,49 @@ public class Rvpreview extends JFrame {
         this.discountStrategy = discountStrategy; // 할인 전략 주입
 
         setTitle("예약 내역 요약");
-        setSize(600, 200);
+        setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setLayout(new GridLayout(6, 2));
+        setLayout(new GridLayout(8, 2, 10, 5)); // 8행 2열의 그리드 레이아웃을 사용합니다. 간격은 5로 설정합니다.
 
-        JLabel totalNumberOfPeopleLabel = new JLabel("총 인원수: " + totalNumberOfPeople);
-        JLabel numberOfAdultsLabel = new JLabel("성인: " + numberOfAdults);
-        JLabel numberOfYouthsLabel = new JLabel("청소년: " + numberOfYouths);
-        JLabel numberOfStudentsLabel = new JLabel("초등학생: " + numberOfStudents);
-        JLabel numberOfChildrenLabel = new JLabel("미취학 아동: " + numberOfChildren);
-        JLabel numberOfInfantsLabel = new JLabel("영유아: " + numberOfInfants);
+        add(new JLabel("                총 인원수: " + totalNumberOfPeople));
+        add(new JLabel());
+
+        add(new JLabel("                성인: " + numberOfAdults));
+        add(new JLabel());
+
+        add(new JLabel("                청소년: " + numberOfYouths));
+        add(new JLabel());
+
+        add(new JLabel("                초등학생: " + numberOfStudents));
+        add(new JLabel());
+
+        add(new JLabel("                미취학 아동: " + numberOfChildren));
+        add(new JLabel());
+
+        add(new JLabel("                영유아: " + numberOfInfants));
+        add(new JLabel());
+
+        add(new JLabel("                선택한 좌석: " + selectedSeats.toString()));
 
         double totalPrice = calculateTotalPrice();
         double discountedPrice = discountStrategy.calculateDiscount(totalPrice); // 할인 적용
-        JLabel totalPriceLabel = new JLabel("총 가격: " + new DecimalFormat("#,###").format(discountedPrice) + "원");
+        add(new JLabel("            총 가격: " + new DecimalFormat("#,###").format(discountedPrice) + "원"));
 
-        JLabel selectedSeatsLabel = new JLabel("선택한 좌석: " + selectedSeats.toString());
 
-        add(totalNumberOfPeopleLabel);
-        add(new JLabel());
-        add(numberOfAdultsLabel);
-        add(new JLabel());
-        add(numberOfYouthsLabel);
-        add(new JLabel());
-        add(numberOfStudentsLabel);
-        add(new JLabel());
-        add(numberOfChildrenLabel);
-        add(new JLabel());
-        add(numberOfInfantsLabel);
-        add(new JLabel());
-        add(totalPriceLabel);
-        add(selectedSeatsLabel);
-
-        JButton closeButton = new JButton("닫기");
+        JButton closeButton = new JButton("예매 완료");
         closeButton.addActionListener(e -> System.exit(0));
         add(closeButton);
+
+        JButton cancelButton = new JButton("예매 취소");
+        cancelButton.addActionListener(e -> {
+            Cancle cancle = new Cancle(totalNumberOfPeople); // Cancle 클래스 인스턴스 생성
+            cancle.setVisible(true);
+            dispose(); // Rvpreview 프레임 닫기
+        });
+        add(cancelButton);
+
+
     }
 
     private double calculateTotalPrice() {
@@ -91,12 +98,11 @@ public class Rvpreview extends JFrame {
         } else {
             discountStrategy = new DefaultDiscountStrategy(); // 그 외에는 기본 금액 전략
         }
-
         if (ReservationValidator.isInfantOnlyReservation(numberOfAdults, numberOfYouths,
                 numberOfStudents, numberOfChildren, numberOfInfants)) {
-            // 영유아로만 구성된 예약은 불가능하므로 메시지 창을 띄우고 null 반환
             JOptionPane.showMessageDialog(null, "영유아로만 구성된 예약은 불가능합니다.", "예약 불가", JOptionPane.ERROR_MESSAGE);
-            return null;
+            return null; // 영유아로만 구성된 예약은 불가능하므로 메시지 창을 띄우고 null 반환
+
         }
         return new Rvpreview(totalNumberOfPeople, numberOfAdults, numberOfYouths, numberOfStudents,
                 numberOfChildren, numberOfInfants, selectedSeats, discountStrategy);

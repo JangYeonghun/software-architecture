@@ -1,5 +1,5 @@
 public class GroupDiscountStrategy implements DiscountStrategy {
-    private static final double GROUP_DISCOUNT_PERCENTAGE = 0.1;
+    private static final double GROUP_DISCOUNT_PERCENTAGE = 0.3;
 
     @Override
     public double calculateDiscount(double totalPrice) {
