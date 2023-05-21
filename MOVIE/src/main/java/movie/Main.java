@@ -10,7 +10,7 @@ import java.io.*;
 
 /**
  *
- * @author 회원가입과 로그인 / 사용자와 관리자 선택
+ * @author 회원가입과 로그인
  */
 public class Main extends JFrame {
 
@@ -34,7 +34,7 @@ public class Main extends JFrame {
         pw.setBounds(290, 210, 200, 35);
         contentPane.add(pw);
 
-        // < 회원가입 버튼 만들기 >
+        // < 회원가입 버튼 >
         JButton join = new JButton("회원가입");
         Font font = join.getFont();
         join.setFont(new Font(font.getName(), font.getStyle(), 15));
@@ -44,7 +44,7 @@ public class Main extends JFrame {
         join.setBackground(Color.WHITE);
         contentPane.setLayout(null);
 
-        // < 로그인 버튼 만들기 >
+        // < 로그인 버튼 >
         JButton login = new JButton("로그인");
         login.setFont(new Font(font.getName(), font.getStyle(), 13));
         login.setLocation(390, 300);
@@ -53,7 +53,7 @@ public class Main extends JFrame {
         login.setBackground(Color.WHITE);
         contentPane.setLayout(null);
 
-        //< 개인정보변경 버튼 만들기 >
+        //< 개인정보변경 버튼 >
         JButton change = new JButton("개인정보변경");
         change.setFont(new Font(font.getName(), font.getStyle(), 12));
         change.setLocation(295, 360);
@@ -89,13 +89,12 @@ public class Main extends JFrame {
         }
         );
 
-        // < 회원가입 버튼 누르면 ManagerMode 창 뜸 >
+        // < 회원가입 버튼 누르면 SignUp 창 뜸 >
         join.addActionListener((ActionEvent e) -> {
             new SignUp();
             setVisible(false);
         }
         );
-        setVisible(true);
 
         // < 개인정보변경 버튼을 누르면 MemberInfoChanger 창 뜸>
         change.addActionListener((ActionEvent e) -> {
@@ -103,6 +102,7 @@ public class Main extends JFrame {
             setVisible(false);
         }
         );
+        setVisible(true);
     }
 
     class MainPanel extends JPanel {

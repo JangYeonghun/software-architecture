@@ -12,7 +12,7 @@ import javax.swing.*;
 
 /**
  *
- * @author smkls
+ * @author 회원정보변경
  */
 public class MemberInfoChanger extends JFrame implements ActionListener {
 
@@ -31,7 +31,7 @@ public class MemberInfoChanger extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(700, 500);
         setLocationRelativeTo(null);
-       
+
         JPanel panel = new JPanel();
         panel.setLayout(null);
         panel.setBackground(Color.WHITE);
@@ -39,8 +39,8 @@ public class MemberInfoChanger extends JFrame implements ActionListener {
         JLabel titleLabel = new JLabel("회원정보변경");
         titleLabel.setBounds(250, 10, 400, 50);
         titleLabel.setFont(new Font("한컴 말랑말랑 Bold", Font.BOLD, 35));
-        panel.add(titleLabel);       
-        
+        panel.add(titleLabel);
+
         JLabel idLabel = new JLabel("아이디");
         idLabel.setBounds(200, 100, 80, 20);
         Font font = idLabel.getFont();
@@ -54,7 +54,7 @@ public class MemberInfoChanger extends JFrame implements ActionListener {
         pwLabel.setBounds(180, 140, 80, 20);
         pwLabel.setFont(new Font(font.getName(), font.getStyle(), 12));
         panel.add(pwLabel);
-        pwField = new JTextField(20);
+        pwField = new JPasswordField(20);
         pwField.setBounds(270, 140, 200, 20);
         panel.add(pwField);
 
@@ -62,7 +62,7 @@ public class MemberInfoChanger extends JFrame implements ActionListener {
         changeLabel.setBounds(180, 180, 80, 20);
         changeLabel.setFont(new Font(font.getName(), font.getStyle(), 12));
         panel.add(changeLabel);
-        changeField = new JTextField(20);
+        changeField = new JPasswordField(20);
         changeField.setBounds(270, 180, 200, 20);
         panel.add(changeField);
 
@@ -96,26 +96,32 @@ public class MemberInfoChanger extends JFrame implements ActionListener {
         confirmButton.setBackground(Color.WHITE);
         confirmButton.addActionListener(this);
         panel.add(confirmButton);
-        
-        confirmButton.addActionListener((ActionEvent e) -> {
-            new Main();
-            setVisible(false);
-        }
-        );
 
         add(panel);
         setVisible(true);
-    }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == confirmButton) {
+        confirmButton.addActionListener((ActionEvent e) -> {
             String id = idField.getText();
             String pw = pwField.getText();
             String pw2 = changeField.getText();
             String name = nameField.getText();
             String birth = birthField.getText();
             String phone = phoneField.getText();
+
+            if (!isAlphabetic(name)) {
+                JOptionPane.showMessageDialog(null, "이름은 영어와 한글만 입력할 수 있습니다.");
+                return;
+            }
+
+            if (!isNumeric(birth)) {
+                JOptionPane.showMessageDialog(null, "생년월일은 숫자만 입력할 수 있습니다.");
+                return;
+            }
+
+            if (!isNumeric(phone)) {
+                JOptionPane.showMessageDialog(null, "전화번호는 숫자만 입력할 수 있습니다.");
+                return;
+            }
 
             try {
                 BufferedReader reader = new BufferedReader(new FileReader("member.txt"));
@@ -131,7 +137,7 @@ public class MemberInfoChanger extends JFrame implements ActionListener {
                             found = true;
                         } else {
                             JOptionPane.showMessageDialog(null, "현재 비밀번호가 일치하지 않습니다.");
-                            return; 
+                            return;
                         }
                     }
                     sb.append(line).append("\n");
@@ -140,7 +146,7 @@ public class MemberInfoChanger extends JFrame implements ActionListener {
 
                 if (!found) {
                     JOptionPane.showMessageDialog(null, "해당 아이디를 찾을 수 없습니다.");
-                    return; 
+                    return;
                 }
 
                 BufferedWriter writer = new BufferedWriter(new FileWriter("member.txt"));
@@ -148,9 +154,26 @@ public class MemberInfoChanger extends JFrame implements ActionListener {
                 writer.close();
 
                 JOptionPane.showMessageDialog(null, "회원 정보가 변경되었습니다.");
+                dispose(); // 현재 창 닫기
+                Main main = new Main();
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "파일 처리 중 오류가 발생하였습니다.");
             }
-        }
+        });
+    }
+
+    private boolean isAlphabetic(String input) {
+        String regex = "^[a-zA-Z가-힣]+$";
+        return input.matches(regex);
+    }
+
+    private boolean isNumeric(String input) {
+        String regex = "^[0-9]+$";
+        return input.matches(regex);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
