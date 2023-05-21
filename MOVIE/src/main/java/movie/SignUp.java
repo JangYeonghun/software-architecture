@@ -49,7 +49,7 @@ public class SignUp extends JFrame {
         phoneNumber.setBounds(300, 315, 240, 35); // 가로 위치, 세로 위치, 가로 길이, 세로 길이
         contentPane.add(phoneNumber);
 
-        // < 회원가입 버튼 >
+        // 회원가입
         JButton signup = new JButton("회원가입");
         Font font = signup.getFont();
         signup.setFont(new Font(font.getName(), font.getStyle(), 15));
@@ -63,52 +63,21 @@ public class SignUp extends JFrame {
 
         signup.addActionListener((var e) -> {
             try {
-                if (id.getText().isEmpty() || String.valueOf(pw.getPassword()).isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "아이디와 비밀번호는 필수 정보입니다. 입력해주세요.");
-                    return;
-
-                } else if (isIdDuplicate(id.getText())) {
-                    JOptionPane.showMessageDialog(null, "이미 사용 중인 ID입니다. 다른 ID를 입력해주세요.");
+                if (id.getText().isEmpty() || String.valueOf(pw.getPassword()).isEmpty()
+                        || name.getText().isEmpty() || birth.getText().isEmpty() || phoneNumber.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "입력되지 않은 정보가 있습니다. 다시 입력해주세요.");
                     return;
                 }
-
-                Member.MemberBuilder builder = new Member.MemberBuilder()
-                        .setId(id.getText(), String.valueOf(pw.getPassword()))
+                MemberBuilder builder = new MemberBuilder()
+                        .setId(id.getText())
+                        .setPw(String.valueOf(pw.getPassword()))
                         .setName(name.getText())
                         .setBirth(birth.getText())
                         .setPhoneNumber(phoneNumber.getText());
-                Member newMember = builder.build();
-
-                if (!name.getText().isEmpty()) { // 이름 - 한글과 영어
-                    String nameText = name.getText();
-                    if (!nameText.matches("[가-힣a-zA-Z]+")) {
-                        JOptionPane.showMessageDialog(null, "이름은 한글과 영어만 입력 가능합니다.");
-                        return;
-                    }
-                    builder.setName(nameText);
-                }
-
-                if (!birth.getText().isEmpty()) { // 생년월일 - 숫자
-                    String birthText = birth.getText();
-                    if (!birthText.matches("[0-9]+")) {
-                        JOptionPane.showMessageDialog(null, "생년월일은 숫자만 입력 가능합니다.");
-                        return;
-                    }
-                    builder.setBirth(birthText);
-                }
-
-                if (!phoneNumber.getText().isEmpty()) { // 전화번호 - 숫자
-                    String phoneNumberText = phoneNumber.getText();
-                    if (!phoneNumberText.matches("[0-9]+")) {
-                        JOptionPane.showMessageDialog(null, "전화번호는 숫자만 입력 가능합니다.");
-                        return;
-                    }
-                    builder.setPhoneNumber(phoneNumberText);
-                }
-
+                MemberBuilder.Member newMember = builder.build();
+                
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter("member.txt", true))) {
                     writer.write(newMember.toString() + "\n");
-                    writer.close();
                 }
                 JOptionPane.showMessageDialog(null, "회원가입이 완료되었습니다.");
                 dispose(); // 현재 창 닫기
@@ -116,31 +85,13 @@ public class SignUp extends JFrame {
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "회원가입에 실패하셨습니다.");
             }
-        }
-        );
-    }
-
-    boolean isIdDuplicate(String id) {
-        File file = new File("member.txt");
-        if (!file.exists()) {
-            return false; // 파일이 존재하지 않으면 중복 ID도 없음
-        }
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] data = line.split(",");
-                if (data.length > 0 && data[0].equals(id)) {
-                    return true; // 중복 ID가 존재함
-                }
+        });
+        /*Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            File file = new File("member.txt");
+            if (file.exists()) {
+                file.delete();
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false; // 중복 ID가 존재하지 않음
-
+        }));*/
     }
 
     class SignUpPanel extends JPanel {
