@@ -10,7 +10,7 @@ import java.io.*;
 
 /**
  *
- * @author 회원가입과 로그인 / 사용자와 관리자 선택
+ * @author 회원가입과 로그인
  */
 public class Main extends JFrame {
 
