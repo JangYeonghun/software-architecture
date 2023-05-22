@@ -92,9 +92,9 @@ public class Info extends JFrame {
 
 
         // 각각의 Genre 객체 생성
-        Genre comicGenre = new Comic("C:\\Users\\gnsdu\\OneDrive\\문서\\NetBeansProjects\\softwareproject\\src\\main\\java\\movieinfo\\movie_comic.txt");
-        Genre actionGenre = new Action("C:\\Users\\gnsdu\\OneDrive\\문서\\NetBeansProjects\\softwareproject\\src\\main\\java\\movieinfo\\movie_action.txt");
-        Genre animeGenre = new Anime("C:\\Users\\gnsdu\\OneDrive\\문서\\NetBeansProjects\\softwareproject\\src\\main\\java\\movieinfo\\movie_anime.txt");
+        Genre comicGenre = new Comic("movie_comic.txt");
+        Genre actionGenre = new Action("movie_action.txt");
+        Genre animeGenre = new Anime("movie_anime.txt");
 
         // GenreComposite 객체 생성 후 각각의 Genre 객체를 추가
         GenreComposite genreComposite = new GenreComposite();

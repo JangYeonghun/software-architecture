@@ -15,7 +15,7 @@ import java.io.InputStreamReader;
  */
 public class Comic implements Genre {
     private String title;
-    private double rating;
+    private String time;
     private String plot;
 
     public Comic(String fileName) {
@@ -25,11 +25,11 @@ public class Comic implements Genre {
             String line = reader.readLine();
             String[] parts = line.split(",");
             title = parts[0].substring(4);
-            rating = Double.parseDouble(parts[1].substring(4));
-            plot = parts[2];
+            time = parts[1].substring(4);
+            plot = parts[2].substring(5);
             for (int i = 3; i < parts.length; i++) {
-            plot += "," + parts[i];
-        }
+                plot += "," + parts[i];
+            }
         } catch (IOException e) {
             System.err.println(e);
         } finally {
@@ -45,6 +45,6 @@ public class Comic implements Genre {
 
     @Override
     public String getContent() {
-        return "COMIC\n\n제목: " + title + "\n" + "평점: " + rating + "\n" + "줄거리: " + plot + "\n\n";
+        return "COMIC\n\n제목: " + title + "\n" + "시간: " + time + "\n" + "줄거리: " + plot + "\n\n";
     }
 }

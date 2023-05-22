@@ -34,7 +34,7 @@ public class ComicReviewPage extends ReviewPage {
     * Reviews are loaded and saved to a text file.
     */
     public ComicReviewPage() {
-        super("comic", "C:\\Users\\gnsdu\\OneDrive\\문서\\NetBeansProjects\\softwareproject\\src\\main\\java\\movieinfo\\review_comic.txt");
+        super("comic", "review_comic.txt");
         // comic 장르에 대한 리뷰를 불러오는 코드
         frame = new JFrame();
         reviewListModel = new DefaultListModel<>();
@@ -49,30 +49,26 @@ public class ComicReviewPage extends ReviewPage {
         addButton.addActionListener((ActionEvent e) -> {
             String reviewText = JOptionPane.showInputDialog("새로운 리뷰를 작성하세요:");
             if (reviewText != null && reviewText.trim().length() > 0) {
-                Review review = new Review(reviewText);
-                reviews.add(review);
-                reviewListModel.addElement(reviewText);
-                saveReviewsToFile();
+                String ratingText = JOptionPane.showInputDialog("평점을 입력하세요:");
+                if (ratingText != null && ratingText.trim().length() > 0) {
+                    try {
+                        double rating = Double.parseDouble(ratingText); // rating 변수 선언 및 값 할당
+                        Review review = new Review(reviewText, rating);
+                        reviews.add(review);
+                        reviewListModel.addElement(reviewText + ", " + rating);
+                        saveReviewsToFile();
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(null, "올바른 숫자 형식의 평점을 입력해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
             }
         });
         frame.add(addButton, BorderLayout.SOUTH);
-        
+
         // 파일에서 리뷰 불러오기
-        reviewFile = new File("C:\\Users\\gnsdu\\OneDrive\\문서\\NetBeansProjects\\softwareproject\\src\\main\\java\\movieinfo\\review_comic.txt");
-        if (reviewFile.exists()) {
-            try (Scanner scanner = new Scanner(reviewFile)) {
-                while (scanner.hasNextLine()) {
-                    String reviewText = scanner.nextLine();
-                    Review review = new Review(reviewText);
-                    reviews.add(review);
-                    reviewListModel.addElement(reviewText);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-
+        reviewFile = new File("review_comic.txt");
+        loadReviews(); // 리뷰 불러오기 추가
+        
         frame.pack();
         frame.setVisible(true);
     }
@@ -81,7 +77,10 @@ public class ComicReviewPage extends ReviewPage {
     public void displayReviews() {
         reviewListModel.clear();
         for (Review review : reviews) {
-            reviewListModel.addElement(review.getReview());
+            String reviewText = review.getReview();
+            double rating = review.getRating();
+            String displayText = "리뷰: " + reviewText + " 평점: " + rating; // 리뷰와 평점을 함께 표시
+            reviewListModel.addElement(displayText);
         }
     }
 
@@ -90,12 +89,30 @@ public class ComicReviewPage extends ReviewPage {
         // comic 장르 리뷰 페이지로 이동하는 코드
         displayReviews();
     }
-    
+
+    // 파일에서 리뷰 불러오기
+    private void loadReviews() {
+        if (reviewFile.exists()) {
+            try (Scanner scanner = new Scanner(reviewFile)) {
+                while (scanner.hasNextLine()) {
+                    String line = scanner.nextLine();
+                    String reviewText = extractReviewTextFromLine(line);
+                    double rating = extractRatingFromReviewText(line);
+                    Review review = new Review(reviewText, rating);
+                    reviews.add(review);
+                    reviewListModel.addElement(reviewText + ", " + rating);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     // 파일에 리뷰 저장하기
     private void saveReviewsToFile() {
         try (PrintWriter writer = new PrintWriter(reviewFile)) {
             for (Review review : reviews) {
-                writer.println(review.getReview());
+                writer.println(review.getReview() + "," + review.getRating()); // 리뷰와 평점을 함께 저장
             }
         } catch (IOException e) {
             e.printStackTrace();

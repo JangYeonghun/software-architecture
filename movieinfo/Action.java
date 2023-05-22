@@ -15,7 +15,7 @@ import java.io.InputStreamReader;
  */
 public class Action implements Genre {
     private String title;
-    private double rating;
+    private String time;
     private String plot;
 
     public Action(String fileName) {
@@ -25,8 +25,8 @@ public class Action implements Genre {
             String line = reader.readLine();
             String[] parts = line.split(",");
             title = parts[0].substring(4);
-            rating = Double.parseDouble(parts[1].substring(4));
-            plot = parts[2];
+            time = parts[1].substring(4);
+            plot = parts[2].substring(5);
             for (int i = 3; i < parts.length; i++) {
                 plot += "," + parts[i];
             }
@@ -45,6 +45,6 @@ public class Action implements Genre {
 
     @Override
     public String getContent() {
-        return "ACTION\n\n제목: " + title + "\n" + "평점: " + rating + "\n" + "줄거리: " + plot + "\n\n";
+        return "ACTION\n\n제목: " + title + "\n" + "시간: " + time + "\n" + "줄거리: " + plot + "\n\n";
     }
 }

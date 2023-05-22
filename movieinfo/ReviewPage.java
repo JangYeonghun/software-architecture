@@ -9,8 +9,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -53,8 +51,13 @@ public abstract class ReviewPage {
             reader = new BufferedReader(new InputStreamReader(new FileInputStream(reviewFile), "UTF-8"));
             String line;
             while ((line = reader.readLine()) != null) {
-                Review review = new Review(line);
-                loadedReviews.add(review);
+                String[] parts = line.split(",");
+                if (parts.length == 2) {
+                    String reviewText = parts[0].trim();
+                    double rating = Double.parseDouble(parts[1].trim());
+                    Review review = new Review(reviewText, rating);
+                    loadedReviews.add(review);
+                }
             }
             reviews = loadedReviews; // 리스트 초기화
         } catch (IOException e) {
@@ -78,7 +81,9 @@ public abstract class ReviewPage {
         try {
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(reviewFile), "UTF-8"));
             for (Review review : reviews) {
-                writer.write(review.getReview() + "\n");
+                String reviewText = review.getReview();
+                double rating = review.getRating();
+                writer.write(reviewText + "," + rating + "\n");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -91,5 +96,26 @@ public abstract class ReviewPage {
                 }
             }
         }
+    }
+    
+    public String extractReviewTextFromLine(String line) {
+        String[] parts = line.split(",");
+        if (parts.length > 0) {
+            return parts[0].trim();
+        }
+        return "";
+    }
+
+    public double extractRatingFromReviewText(String line) {
+        String[] parts = line.split(",");
+        if (parts.length > 1) {
+            String ratingText = parts[1].trim();
+            try {
+                return Double.parseDouble(ratingText);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+        return 0.0;
     }
 }
