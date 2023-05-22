@@ -17,6 +17,10 @@ public abstract class CancellationTemplate extends JFrame {
 
         JButton exitButton = new JButton("예매 종료");
         exitButton.addActionListener(e -> System.exit(0));
+        exitButton.addActionListener(e -> {
+            JOptionPane.showMessageDialog(null, "영화 예매가 종료되었습니다.");
+            System.exit(0);
+        });
         add(exitButton);
     }
 

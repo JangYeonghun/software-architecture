@@ -1,10 +1,13 @@
 import javax.swing.*;
-import java.awt.*;
 
 public class CancellationOptions extends CancellationTemplate {
+    private int[] individualCounts; // 각각의 인원 수를 저장할 배열
+
     public CancellationOptions(int totalNumberOfPeople) {
         super(totalNumberOfPeople);
+        this.individualCounts = individualCounts;
     }
+
 
     @Override
     protected void addButton() {
@@ -26,8 +29,7 @@ public class CancellationOptions extends CancellationTemplate {
 
         JButton seatSelectButton = new JButton("좌석 다시 선택하기");
         seatSelectButton.addActionListener(e -> {
-
-            Seats seats = new Seats(totalNumberOfPeople, 0, 0, 0, 0, 0);
+            Seats seats = new Seats(totalNumberOfPeople, individualCounts[0], individualCounts[1], individualCounts[2], individualCounts[3], individualCounts[4]);
             seats.setVisible(true);
             dispose();
         });
