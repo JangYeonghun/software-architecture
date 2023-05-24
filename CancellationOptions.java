@@ -2,8 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class CancellationOptions extends CancellationTemplate {
-    public CancellationOptions(int totalNumberOfPeople) {
-        super(totalNumberOfPeople);
+    public CancellationOptions(int totalNumberOfPeople, int numberOfAdults, int numberOfYouths,int numberOfStudents,
+                               int numberOfChildren ,int numberOfInfants) {
+        super(totalNumberOfPeople,numberOfAdults,numberOfYouths,numberOfStudents, numberOfChildren,numberOfInfants);
     }
 
     @Override
@@ -26,8 +27,8 @@ public class CancellationOptions extends CancellationTemplate {
 
         JButton seatSelectButton = new JButton("좌석 다시 선택하기");
         seatSelectButton.addActionListener(e -> {
-
-            Seats seats = new Seats(totalNumberOfPeople, 0, 0, 0, 0, 0);
+            Seats seats = new Seats(totalNumberOfPeople,numberOfAdults,
+                    numberOfYouths, numberOfStudents,numberOfChildren, numberOfInfants,TypePeople.getInstance(0));
             seats.setVisible(true);
             dispose();
         });

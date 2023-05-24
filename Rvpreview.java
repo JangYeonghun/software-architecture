@@ -16,9 +16,6 @@ public class Rvpreview extends JFrame {
 
     private DiscountStrategy discountStrategy; // 할인 전략 객체
 
-    private boolean isCancelled; // 취소 여부를 나타내는 변수
-
-
     public Rvpreview(int totalNumberOfPeople, int numberOfAdults, int numberOfYouths, int numberOfStudents,
                      int numberOfChildren, int numberOfInfants, Set<String>selectedSeats,
                      DiscountStrategy discountStrategy) {
@@ -30,8 +27,6 @@ public class Rvpreview extends JFrame {
         this.numberOfInfants = numberOfInfants;
         this.selectedSeats = selectedSeats;
         this.discountStrategy = discountStrategy; // 할인 전략 주입
-        this.isCancelled = isCancelled; // isCancelled 변수 설정
-
 
         setTitle("예약 내역 요약");
         setSize(600, 400);
@@ -65,19 +60,21 @@ public class Rvpreview extends JFrame {
 
 
         JButton closeButton = new JButton("예매 완료");
+        closeButton.addActionListener(e -> System.exit(0));
         closeButton.addActionListener(e -> {
             JOptionPane.showMessageDialog(null, "영화 예매가 완료되었습니다.");
             System.exit(0);
         });
         add(closeButton);
 
+
         JButton cancelButton = new JButton("예매 취소");
         cancelButton.addActionListener(e -> {
-            CancellationTemplate cancellation = new CancellationOptions(totalNumberOfPeople);
-            cancellation.setVisible(true);
-            dispose(); // Rvpreview 프레임 닫기
-        });
-        add(cancelButton);
+        CancellationTemplate cancellation = new CancellationOptions(totalNumberOfPeople,numberOfAdults,numberOfYouths,numberOfStudents,numberOfChildren,numberOfInfants);
+        cancellation.setVisible(true);
+        dispose(); // Rvpreview 프레임 닫기
+    });
+    add(cancelButton);
 
 
     }
@@ -105,12 +102,12 @@ public class Rvpreview extends JFrame {
             discountStrategy = new GroupDiscountStrategy(); // 총 인원이 5명 이상인 경우 그룹 할인 전략
         } else {
             discountStrategy = new DefaultDiscountStrategy(); // 그 외에는 기본 금액 전략
-
         }
         if (ReservationValidator.isInfantOnlyReservation(numberOfAdults, numberOfYouths,
                 numberOfStudents, numberOfChildren, numberOfInfants)) {
             JOptionPane.showMessageDialog(null, "영유아로만 구성된 예약은 불가능합니다.", "예약 불가", JOptionPane.ERROR_MESSAGE);
             return null; // 영유아로만 구성된 예약은 불가능하므로 메시지 창을 띄우고 null 반환
+
         }
         return new Rvpreview(totalNumberOfPeople, numberOfAdults, numberOfYouths, numberOfStudents,
                 numberOfChildren, numberOfInfants, selectedSeats, discountStrategy);

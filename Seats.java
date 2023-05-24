@@ -15,19 +15,25 @@ public class Seats extends JFrame {
 
     private Set<String> selectedSeats;
     private JLabel selectedSeatsLabel;
+    private JLabel totalSelectedSeatsLabel;
     private JLabel totalPriceLabel;
+    private TypePeople typepeople;
+    TypePeople typePeople = TypePeople.getInstance(totalNumberOfPeople);
+    int sum = typePeople.getTotalNumberOfPeople();
 
-    public Seats(int totalNumberOfPeople, int numberOfAdults, int numberOfYouths, int numberOfStudents,
-                 int numberOfChildren, int numberOfInfants) {
+    public Seats(int totalNumberOfPeople, int numberOfAdults, int numberOfYouths,
+                 int numberOfStudents, int numberOfChildren, int numberOfInfants, TypePeople typePeople) {
+
         this.totalNumberOfPeople = totalNumberOfPeople;
         this.numberOfAdults = numberOfAdults;
+        this.numberOfChildren = numberOfChildren;
         this.numberOfYouths = numberOfYouths;
         this.numberOfStudents = numberOfStudents;
-        this.numberOfChildren = numberOfChildren;
         this.numberOfInfants = numberOfInfants;
+        this.typepeople = typePeople;
 
         setTitle("좌석 선택");
-        setSize(400, 400);
+        setSize(800, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
@@ -38,11 +44,12 @@ public class Seats extends JFrame {
         add(seatsPanel, BorderLayout.CENTER);
 
         JPanel infoPanel = createInfoPanel();
-        add(infoPanel, BorderLayout.SOUTH);
+        add(infoPanel, BorderLayout.NORTH);
 
         JButton nextButton = createNextButton();
         add(nextButton, BorderLayout.SOUTH);
     }
+
 
     private JPanel createSeatsPanel() {
         JPanel seatsPanel = new JPanel(new GridLayout(5, 5));
@@ -58,20 +65,22 @@ public class Seats extends JFrame {
     }
 
     private JPanel createInfoPanel() {
-        JPanel infoPanel = new JPanel(new GridLayout(3, 2));
-        JLabel numberOfPeopleLabel = new JLabel("인원수: " + totalNumberOfPeople);
-        JLabel selectedSeatsTitleLabel = new JLabel("선택한 좌석:");
+        JPanel infoPanel = new JPanel(new GridLayout(3, 1));
+
+
         selectedSeatsLabel = new JLabel();
-        JLabel totalPriceTitleLabel = new JLabel("총 가격:");
-        totalPriceLabel = new JLabel();
-        infoPanel.add(numberOfPeopleLabel);
-        infoPanel.add(new JLabel());
-        infoPanel.add(selectedSeatsTitleLabel);
+        totalSelectedSeatsLabel = new JLabel();
+        JLabel selectedTotalPeopleValueLabel = new JLabel(Integer.toString(totalNumberOfPeople)+"개의 좌석 까지 선택 가능합니다.");
         infoPanel.add(selectedSeatsLabel);
-        infoPanel.add(totalPriceTitleLabel);
-        infoPanel.add(totalPriceLabel);
+
+        infoPanel.add(totalSelectedSeatsLabel);
+
+        infoPanel.add(selectedTotalPeopleValueLabel);
+
+
         return infoPanel;
     }
+
 
     private JButton createNextButton() {
         JButton nextButton = new JButton("예매내역 확인하기");
@@ -79,14 +88,14 @@ public class Seats extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (selectedSeats.size() != totalNumberOfPeople) {
-                    JOptionPane.showMessageDialog(Seats.this, "총 인원수와 선택된 좌석 수가 일치하지 않습니다.");
+                    JOptionPane.showMessageDialog(Seats.this, "총 인원수와 선택된 좌석 수가 일치하지 않습니다 \n" +
+                            "총 인원수 : "+ sum);
                     return;
                 }
-
                 dispose();
                 Rvpreview rvpreview = Rvpreview.createInstance(totalNumberOfPeople, numberOfAdults, numberOfYouths,
                         numberOfStudents, numberOfChildren, numberOfInfants,
-                        selectedSeats,true);
+                        selectedSeats, true);
                 rvpreview.setVisible(true);
             }
         });
@@ -109,7 +118,7 @@ public class Seats extends JFrame {
             } else {
                 if (selectedSeats.size() >= totalNumberOfPeople) {
                     JOptionPane.showMessageDialog(
-                            Seats.this, "더 이상 좌석을 선택할 수 없습니다.");
+                            Seats.this, "더 이상 좌석을 선택할 수 없습니다.\n" + "선택 가능한 최대 좌석수 : "+sum);
                     return;
                 }
 
@@ -121,6 +130,7 @@ public class Seats extends JFrame {
             updateSelectedSeatsLabel();
         }
 
+
         private void updateSelectedSeatsLabel() {
             StringBuilder selectedSeatsStr = new StringBuilder();
             for (String seat : selectedSeats) {
@@ -130,6 +140,7 @@ public class Seats extends JFrame {
                 selectedSeatsStr.delete(selectedSeatsStr.length() - 2, selectedSeatsStr.length());
             }
             selectedSeatsLabel.setText(selectedSeatsStr.toString());
+            totalSelectedSeatsLabel.setText("현재 선택된 좌석의 수: " + selectedSeats.size());
         }
     }
 }

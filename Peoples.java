@@ -24,7 +24,8 @@ public class Peoples extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 totalNumberOfPeople = Integer.parseInt(textField.getText());
                 dispose();
-                TypePeople seatTypeFrame = new TypePeople(totalNumberOfPeople);
+                TypePeople seatTypeFrame;
+                seatTypeFrame = new TypePeople(totalNumberOfPeople);
                 seatTypeFrame.setVisible(true);
             }
         });
@@ -34,12 +35,5 @@ public class Peoples extends JFrame {
         panel.add(nextButton);
 
         add(panel, BorderLayout.CENTER);
-    }
-
-
-    public static void main(String[] args) {
-        Peoples frame = new Peoples();
-        frame.setVisible(true);
-
     }
 }

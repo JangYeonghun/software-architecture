@@ -8,7 +8,7 @@ public class TypePeople extends JFrame {
 
     private int totalNumberOfPeople;
 
-    TypePeople(int totalNumberOfPeople) {
+    public TypePeople(int totalNumberOfPeople) {
         this.totalNumberOfPeople = totalNumberOfPeople;
 
         setTitle("좌석 유형 선택");
@@ -63,8 +63,7 @@ public class TypePeople extends JFrame {
         panel.add(infantsLabel);
         panel.add(infantsTextField);
         add(panel, BorderLayout.CENTER);
-        add(nextButton,BorderLayout.SOUTH);
-
+        add(nextButton, BorderLayout.SOUTH);
     }
 
     public static synchronized TypePeople getInstance(int totalNumberOfPeople) {
@@ -73,11 +72,17 @@ public class TypePeople extends JFrame {
         }
         return instance;
     }
+
+    public int getTotalNumberOfPeople() {
+
+        return totalNumberOfPeople;
+    }
 }
 
 class SeatFactory {
     public static Seats createSeats(int totalNumberOfPeople, int numberOfAdults, int numberOfYouths,
                                     int numberOfStudents, int numberOfChildren, int numberOfInfants) {
-        return new Seats(totalNumberOfPeople, numberOfAdults, numberOfYouths, numberOfStudents, numberOfChildren, numberOfInfants);
+        return new Seats(totalNumberOfPeople, numberOfAdults, numberOfYouths, numberOfStudents, numberOfChildren, numberOfInfants,TypePeople.getInstance(totalNumberOfPeople));
     }
+
 }
