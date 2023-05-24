@@ -15,3 +15,7 @@ ComicReviewPage.java: 각각 인터페이스 구현, 파일 읽어오기
 
 Review.java
 ReviewPage.java: 읽어온 파일 처리하는 로직 구현
+
+ReviewPageController.java
+ReviewPageModel.java
+ReivewPageView.java 는 mvc 패턴 설계 실패 과정이다
