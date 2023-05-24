@@ -30,7 +30,7 @@ public class AnimeReviewPage extends ReviewPage {
     private File reviewFile;
 
     public AnimeReviewPage() {
-        super("comic", "review_anime.txt");
+        super("anime", "review_anime.txt");
         // comic 장르에 대한 리뷰를 불러오는 코드
         frame = new JFrame();
         reviewListModel = new DefaultListModel<>();
@@ -48,11 +48,15 @@ public class AnimeReviewPage extends ReviewPage {
                 String ratingText = JOptionPane.showInputDialog("평점을 입력하세요:");
                 if (ratingText != null && ratingText.trim().length() > 0) {
                     try {
-                        double rating = Double.parseDouble(ratingText); // rating 변수 선언 및 값 할당
-                        Review review = new Review(reviewText, rating);
-                        reviews.add(review);
-                        reviewListModel.addElement(reviewText + ", " + rating);
-                        saveReviewsToFile();
+                        double rating = Double.parseDouble(ratingText);
+                        if (rating > 0 && rating <= 10) { // 평점이 0보다 크고 10보다 작거나 같은지 확인
+                            Review review = new Review(reviewText, rating);
+                            reviews.add(review);
+                            saveReviewsToFile();
+                            displayReviews(); // 리뷰 목록 갱신
+                        } else {
+                            JOptionPane.showMessageDialog(null, "평점은 0보다 크고 10보다 작거나 같아야 합니다.", "오류", JOptionPane.ERROR_MESSAGE);
+                        }
                     } catch (NumberFormatException ex) {
                         JOptionPane.showMessageDialog(null, "올바른 숫자 형식의 평점을 입력해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
                     }
